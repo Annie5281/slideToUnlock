@@ -1,0 +1,43 @@
+**图案解锁项目开发**
+
+界面布局
+当出错时切换成红色警告
+
+一.如何实现点亮功能
+   所有的点和线都是图片，默认隐藏，滑动过程中判断是否显示
+   由于视图最后添加 将显示在最外层，为了盖住线条，9个点最后加
+   如何点亮9个点
+       判断触摸点十分在某个圆点的范围内，如果在范围内就考虑是否点亮
+   如何点亮线
+       给所有的线点添加tag值
+       在点亮两个点时就可以获取两个点之间的线段的tag值，通过这个值可以找到这条线段
+   如何记录密码
+       点亮每个圆点时就记录下这个点的tag值，多个点的tag并拼接起来就形成密码（字符串）
+
+   FrameLayout
+   LinearLayout
+   RelativeLayout
+   ConstrainLayout
+
+二.开发步骤
+   添加图片资源
+       Adobe Xd
+   界面搭建
+       添加一个容器
+       避免触摸点和控件坐标参考系不同 坐标转换操作
+       添加背景图片unlock_bg
+   逻辑功能实现***
+       给工程添加Binding（jetpack）架构组件 viewBinding视图绑定
+          activity_main.xml       MainActivity
+          id = dot1              setContentView(R.id. activity_main.xml)
+          id = dot2
+       开启视图绑定功能
+       将xml中解析出来的view设置为activity的内容视图 getroot
+       使用数组保存9个点
+       给container添加触摸事件，当Action_down时判断触摸点是否在圆点内部
+       记录密码（点亮的时候都需要记录密码）
+
+
+
+   给容器添加滑动的事件
+   滑动的过程需要获得触摸点的坐标 -> 是不是在九个点上的某一个点上面

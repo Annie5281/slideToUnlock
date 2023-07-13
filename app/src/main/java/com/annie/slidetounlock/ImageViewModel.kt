@@ -11,7 +11,7 @@ import android.widget.ImageView
  * 坏处：有多少个控件就得有多少个 model
  *  没有自定义的前提下比较好的方法
  */
-class ViewModel (
+class ImageViewModel (
     val view:ImageView,
     val normalResId:Int,
     val errorResId:Int

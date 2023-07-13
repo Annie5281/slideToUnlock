@@ -3,19 +3,15 @@ package com.annie.slidetounlock
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.view.MotionEvent
-import android.view.View
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.annie.slidetounlock.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),IUnlockView {
 
-
+    private lateinit var presenter:UnlockPresenter
 
     //用一个数组保存所有的模型对象
-    private val modelsArray = arrayListOf<ViewModel>()
+    private val modelsArray = arrayListOf<ImageViewModel>()
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -32,31 +28,52 @@ class MainActivity : AppCompatActivity() {
         val dotArray = arrayOf(binding.dot1,binding.dot2,binding.dot3,binding.dot4,binding.dot5,binding.dot6,binding.dot7,binding.dot8,binding.dot9)
         //遍历数组
         dotArray.forEach {
-            modelsArray.add(ViewModel(it,R.drawable.dot_normal,R.drawable.dot_selected))
+            modelsArray.add(ImageViewModel(it,R.drawable.dot_normal,R.drawable.dot_selected))
         }
 
         //竖线
         val verticalLineArray = arrayOf(binding.line14,binding.line25,binding.line36,binding.line47,binding.line58,binding.line69)
         verticalLineArray.forEach {
-            modelsArray.add(ViewModel(it,R.drawable.line_1_normal,R.drawable.line_1_error))
+            modelsArray.add(ImageViewModel(it,R.drawable.line_1_normal,R.drawable.line_1_error))
         }
 
         //横线
         val landscapeLineArray = arrayOf(binding.line12,binding.line23,binding.line45,binding.line56,binding.line78,binding.line89)
         landscapeLineArray.forEach {
-            modelsArray.add(ViewModel(it,R.drawable.line_2_normal,R.drawable.line_2_error))
+            modelsArray.add(ImageViewModel(it,R.drawable.line_2_normal,R.drawable.line_2_error))
         }
 
         //左斜
         val leftSlashArray = arrayOf(binding.line24,binding.line35,binding.line57,binding.line68)
         leftSlashArray.forEach {
-            modelsArray.add(ViewModel(it,R.drawable.line_4_normal,R.drawable.line_4_error))
+            modelsArray.add(ImageViewModel(it,R.drawable.line_4_normal,R.drawable.line_4_error))
         }
 
         //右斜
         val rightSlashArray = arrayOf(binding.line15,binding.line26,binding.line48,binding.line59)
         rightSlashArray.forEach {
-            modelsArray.add(ViewModel(it,R.drawable.line_3_normal,R.drawable.line_3_error))
-        }}}
+            modelsArray.add(ImageViewModel(it,R.drawable.line_3_normal,R.drawable.line_3_error))
+        }}
+
+    override fun showAlertText(text: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun switchActivity() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        val x = event?.x!!
+        val y = event?.y!!
+
+        when(event?.action){
+            MotionEvent.ACTION_DOWN -> presenter.userTouch(x,y)
+            MotionEvent.ACTION_MOVE -> presenter.userTouch(x,y)
+            MotionEvent.ACTION_UP -> presenter.userTouch(x,y)
+        }
+        return true
+    }
+}
 
 

@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity(),IUnlockView {
         //(3)将绑定类里面对应的view设置给activity
         setContentView(binding.root)
 
+
+
        //9个点的视图保存到数组
         val dotArray = arrayOf(binding.dot1,binding.dot2,binding.dot3,binding.dot4,binding.dot5,binding.dot6,binding.dot7,binding.dot8,binding.dot9)
         //遍历数组
@@ -57,7 +59,6 @@ class MainActivity : AppCompatActivity(),IUnlockView {
             modelsArray.add(ImageViewModel(it,R.drawable.line_3_normal,R.drawable.line_3_error))
         }
 
-
         val lineTagArray = listOf(
             12,23,45,56,78,89,//横
             14,25,36,47,58,69,//竖
@@ -79,6 +80,8 @@ class MainActivity : AppCompatActivity(),IUnlockView {
 
 
     }
+
+
 
     override fun showAlertText(text: String) {
         binding.alertText.text = text

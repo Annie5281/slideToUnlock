@@ -12,14 +12,12 @@ class UnlockPresenter (
 
     //加载用户信息
     fun loadUserinfo(){
-
-        mView.showAlertText("请输入密码")
-        //..
-//        if (user.isLogin){
-//            mView.showAlertText("请输入密码")
-//        }else{
-//            mView.showAlertText("请设置密码")
-//        }
+        user = User("zhangsan","",false)
+        if (user.isLogin){
+            mView.showAlertText("请设置密码图案")
+        }else{
+            mView.showAlertText("请绘制密码图案")
+        }
 
     }
 

@@ -16,6 +16,8 @@ class ImageViewModel (
     val normalResId:Int,
     val errorResId:Int
 ){
+
+    //根据状态 改变图片
     fun changeImage(isNormal:Boolean){
         if(isNormal){
             view.setImageResource(normalResId)

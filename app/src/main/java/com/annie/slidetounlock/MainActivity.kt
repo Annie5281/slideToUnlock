@@ -1,6 +1,7 @@
 package com.annie.slidetounlock
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
@@ -9,6 +10,7 @@ import com.annie.slidetounlock.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(),IUnlockView {
 
     private lateinit var presenter:UnlockPresenter
+    private lateinit var binding: ActivityMainBinding //将binding设成全局的
 
     //用一个数组保存所有的模型对象
     private val modelsArray = arrayListOf<ImageViewModel>()
@@ -53,14 +55,35 @@ class MainActivity : AppCompatActivity(),IUnlockView {
         val rightSlashArray = arrayOf(binding.line15,binding.line26,binding.line48,binding.line59)
         rightSlashArray.forEach {
             modelsArray.add(ImageViewModel(it,R.drawable.line_3_normal,R.drawable.line_3_error))
-        }}
+        }
+
+
+        val lineTagArray = listOf(
+            12,23,45,56,78,89,//横
+            14,25,36,47,58,69,//竖
+            15,26,48,59,//右斜
+            24,35,57,68 //左斜
+        )
+
+        //创建presenter
+        presenter = UnlockPresenter(
+            this,
+            dotArray.toList(),
+            modelsArray.toList(),
+            lineTagArray
+        )
+
+
+    }
 
     override fun showAlertText(text: String) {
-        TODO("Not yet implemented")
+        binding.alertText.text = text
     }
 
     override fun switchActivity() {
-        TODO("Not yet implemented")
+        //界面切换
+        val intent = Intent(this,HomeActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

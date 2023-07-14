@@ -74,6 +74,10 @@ class MainActivity : AppCompatActivity(),IUnlockView {
         )
 
 
+        //调用loadUserInfo
+        presenter.loadUserinfo()
+
+
     }
 
     override fun showAlertText(text: String) {

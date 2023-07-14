@@ -10,6 +10,7 @@ class UnlockPresenter (
     ) {
     private lateinit var user: User
 
+    //加载用户信息
     fun loadUserinfo(){
 
         mView.showAlertText("请输入密码")

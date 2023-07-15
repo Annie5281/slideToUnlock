@@ -4,6 +4,7 @@ import android.os.Handler
 import android.provider.ContactsContract.CommonDataKinds.Im
 import android.view.View
 import android.widget.ImageView
+import javax.net.ssl.SSLEngineResult.Status
 
 class UnlockPresenter (
     private val mView:IUnlockView, //可以找到View的接口
@@ -20,7 +21,7 @@ class UnlockPresenter (
 
     //加载用户信息
     fun loadUserinfo(){
-        user = User("zhangsan","",false)
+        user = User("zhangsan","123",true)
         if (user.isLogin){ //登录
             mView.showAlertText("请绘制密码图案")
         }else{  //没有登录
@@ -43,11 +44,7 @@ class UnlockPresenter (
             //点亮第二个点 和他们之间的线
             highlightDotView(dotView)
             highlightLineView(lineView)
-
-
         }
-
-
     }
 
 
@@ -57,12 +54,14 @@ class UnlockPresenter (
         if (user.isLogin){ //true已经登录过了
             if (user.password == passwordBuilder.toString()){
                 mView.showAlertText("解锁成功")
+                mView.switchActivity()
             }else{
                 mView.showAlertText("解锁失败 请重新绘制密码图案")
+                changeImageWithStatus(ImageStatus.STATUS_ERROR)
             }
             clear()
-        }else{//第一次登录
-            if (firstPassword.isNotEmpty()){ //第一次设置的密码
+        }else{//isLogin = false 第一次登录
+            if (firstPassword.isEmpty()){ //第一次设置的密码
                 firstPassword = passwordBuilder.toString()
                 mView.showAlertText("请确认密码图案")
                 lastSelectedDotView = null //为第二次密码输入做准备
@@ -79,10 +78,25 @@ class UnlockPresenter (
                     mView.showAlertText("两次密码不一致 请重新设置")
                     //清除之前设置的
                     clear()
+                    changeImageWithStatus(ImageStatus.STATUS_ERROR)
                 }
             }
         }
         hideView()
+    }
+
+    private fun changeImageWithStatus(status: Int){
+        selectedViewArray.forEach {
+            mImageViewModelsList.forEach { model->
+                if (model.view == it){
+                    if (status == ImageStatus.STATUS_ERROR){
+                        model.view.setImageResource(model.errorResId)
+                    }else{
+                        model.view.setImageResource(model.normalResId)
+                    }
+                }
+            }
+        }
     }
 
     //②清空
@@ -98,6 +112,7 @@ class UnlockPresenter (
     private fun hideView(){
         Handler().postDelayed({
             selectedViewArray.forEach { it.visibility = View.INVISIBLE }
+            changeImageWithStatus(ImageStatus.STATUS_NORMAL)
             selectedViewArray.clear()
 
         },500)

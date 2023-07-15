@@ -12,9 +12,6 @@ class MainActivity : AppCompatActivity(),IUnlockView {
     private lateinit var presenter:UnlockPresenter
     private lateinit var binding: ActivityMainBinding //将binding设成全局的
 
-    //用一个数组保存所有的模型对象
-    private val modelsArray = arrayListOf<ImageViewModel>()
-
 
     @SuppressLint("ClickableViewAccessibility")
     //View并不一定需要被点解 需要加这个注解
@@ -22,12 +19,13 @@ class MainActivity : AppCompatActivity(),IUnlockView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //(2)创建绑定类对象
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         //(3)将绑定类里面对应的view设置给activity
         setContentView(binding.root)
 
 
-
+        //用一个数组保存所有的模型对象
+        val modelsArray = arrayListOf<ImageViewModel>()
        //9个点的视图保存到数组
         val dotArray = arrayOf(binding.dot1,binding.dot2,binding.dot3,binding.dot4,binding.dot5,binding.dot6,binding.dot7,binding.dot8,binding.dot9)
         //遍历数组
@@ -87,12 +85,10 @@ class MainActivity : AppCompatActivity(),IUnlockView {
             when(event.action){
                 MotionEvent.ACTION_DOWN -> presenter.userTouch(x,y)
                 MotionEvent.ACTION_MOVE -> presenter.userTouch(x,y)
-                MotionEvent.ACTION_UP -> presenter.userTouch(x,y)
+                MotionEvent.ACTION_UP -> presenter.endTouch()
             }
             true
         }
-
-
     }
 
 
@@ -107,10 +103,10 @@ class MainActivity : AppCompatActivity(),IUnlockView {
         startActivity(intent)
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-
-        return true
-    }
+//    override fun onTouchEvent(event: MotionEvent?): Boolean {
+//
+//        return true
+//    }
 }
 
 

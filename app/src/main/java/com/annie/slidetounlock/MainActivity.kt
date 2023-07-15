@@ -78,6 +78,18 @@ class MainActivity : AppCompatActivity(),IUnlockView {
         //调用loadUserInfo
         presenter.loadUserinfo()
 
+        binding.container.setOnTouchListener {v,event->
+            val x = event.x
+            val y = event.y
+
+            when(event.action){
+                MotionEvent.ACTION_DOWN -> presenter.userTouch(x,y)
+                MotionEvent.ACTION_MOVE -> presenter.userTouch(x,y)
+                MotionEvent.ACTION_UP -> presenter.userTouch(x,y)
+            }
+            true
+        }
+
 
     }
 
@@ -94,14 +106,7 @@ class MainActivity : AppCompatActivity(),IUnlockView {
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        val x = event?.x!!
-        val y = event?.y!!
 
-        when(event?.action){
-            MotionEvent.ACTION_DOWN -> presenter.userTouch(x,y)
-            MotionEvent.ACTION_MOVE -> presenter.userTouch(x,y)
-            MotionEvent.ACTION_UP -> presenter.userTouch(x,y)
-        }
         return true
     }
 }

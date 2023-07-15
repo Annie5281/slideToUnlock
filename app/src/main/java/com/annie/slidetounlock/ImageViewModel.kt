@@ -13,8 +13,8 @@ import android.widget.ImageView
  */
 class ImageViewModel (
     val view:ImageView,
-    val normalResId:Int,
-    val errorResId:Int
+    val normalResId:Int,//正常图片资源id
+    val errorResId:Int//错误图片资源id
 ){
     //根据状态 改变图片
     fun changeImage(isNormal:Boolean){

@@ -78,7 +78,9 @@ class MainActivity : AppCompatActivity(),IUnlockView {
         //调用loadUserInfo
         presenter.loadUserinfo()
 
-        binding.container.setOnTouchListener {v,event->
+
+        //九个点的触摸位置应该是相对容器来的 不是相对Activity
+        binding.container.setOnTouchListener { v, event->
             val x = event.x
             val y = event.y
 

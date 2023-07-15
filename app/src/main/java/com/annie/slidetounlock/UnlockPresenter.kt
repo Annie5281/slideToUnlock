@@ -1,5 +1,7 @@
 package com.annie.slidetounlock
 
+import android.os.Handler
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.view.View
 import android.widget.ImageView
 
@@ -11,6 +13,9 @@ class UnlockPresenter (
     ) {
     private lateinit var user: User
     private var lastSelectedDotView:ImageView? = null
+    private val passwordBuilder= StringBuilder()
+    private var firstPassword = "" //用于记录用户第一次登录时设置的密码
+    private val selectedViewArray = arrayListOf<ImageView>()//所有点亮的视图
 
 
     //加载用户信息
@@ -46,8 +51,56 @@ class UnlockPresenter (
     }
 
 
-    fun endTouch(){
 
+    //一抬手 ①滑动结束之后记录密码 判断密码 ②清空图案
+    fun endTouch(){
+        if (user.isLogin){ //true已经登录过了
+            if (user.password == passwordBuilder.toString()){
+                mView.showAlertText("解锁成功")
+            }else{
+                mView.showAlertText("解锁失败 请重新绘制密码图案")
+            }
+            clear()
+        }else{//第一次登录
+            if (firstPassword.isNotEmpty()){ //第一次设置的密码
+                firstPassword = passwordBuilder.toString()
+                mView.showAlertText("请确认密码图案")
+                lastSelectedDotView = null //为第二次密码输入做准备
+                passwordBuilder.clear()
+            }else{//第二次确认密码
+                if (firstPassword == passwordBuilder.toString()){
+                    mView.showAlertText("密码设置成功")
+                    user.password = firstPassword
+                    user.isLogin = true
+                    mView.switchActivity()
+                    lastSelectedDotView = null
+                    passwordBuilder.clear()
+                }else{ //密码两次不同 设置密码失败
+                    mView.showAlertText("两次密码不一致 请重新设置")
+                    //清除之前设置的
+                    clear()
+                }
+            }
+        }
+        hideView()
+    }
+
+    //②清空
+    private fun clear(){
+        firstPassword = ""
+        lastSelectedDotView = null
+        passwordBuilder.clear()
+
+    }
+    /**
+     * 隐藏已经点亮的ImageView
+     */
+    private fun hideView(){
+        Handler().postDelayed({
+            selectedViewArray.forEach { it.visibility = View.INVISIBLE }
+            selectedViewArray.clear()
+
+        },500)
     }
 
     /**
@@ -85,13 +138,20 @@ class UnlockPresenter (
     }
 
 
-    //点亮
+    /**
+     * 点亮
+     */
     private fun highlightDotView(view: ImageView){
         view.visibility = View.VISIBLE
-        lastSelectedDotView = view
+        lastSelectedDotView = view //更新记录上一个点
+        passwordBuilder.append(view.tag as String)//记录密码
+        selectedViewArray.add(view)
+
+
     }
     private fun highlightLineView(view: ImageView){
         view.visibility = View.VISIBLE
+        selectedViewArray.add(view)
     }
 
 
